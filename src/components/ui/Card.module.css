@@ -1,0 +1,46 @@
+.card {
+  background-color: var(--surface-bright);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Subtle paper texture using radial gradient */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(var(--outline-variant) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.interactive {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interactive:hover {
+  background-color: var(--surface-container-highest);
+  border-color: var(--outline);
+}
+
+.none {
+  padding: 0;
+}
+
+.normal {
+  padding: 24px;
+}
+
+.large {
+  padding: 32px;
+}
