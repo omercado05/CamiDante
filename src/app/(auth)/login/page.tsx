@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../auth.module.css';
 
@@ -16,17 +16,37 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Check if already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        router.push('/perfil');
+      }
+    };
+    checkUser();
+  }, [router]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    
+    const { error } = await supabase.auth.signInWithPassword({ 
+      email, 
+      password 
+    });
+
     if (error) {
-      setError(error.message);
+      setError(error.message === 'Invalid login credentials' 
+        ? 'Credenciales inválidas. Revisa tu correo y contraseña.' 
+        : error.message);
+      setLoading(false);
     } else {
+      // Refresh to ensure middleware catches the new session cookie
+      router.refresh();
       router.push('/perfil');
     }
-    setLoading(false);
   };
 
   return (
