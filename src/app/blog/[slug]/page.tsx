@@ -28,7 +28,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     <>
       <Header />
       <main className={`${styles.articleContainer} animate-fade-in`}>
-        <article className="animate-delay-1">
+        <article className="animate-fade-in animate-delay-1">
           <header className={styles.articleHeader}>
             <div className={styles.articleMeta}>
               <span style={{ color: 'var(--secondary)' }}>{post.categories?.name}</span>

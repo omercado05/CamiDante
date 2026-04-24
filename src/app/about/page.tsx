@@ -9,13 +9,13 @@ export default function About() {
 
         {/* Hero */}
         <section className={styles.hero}>
-          <div className={`${styles.avatarWrapper} animate-delay-1`}>
+          <div className={`${styles.avatarWrapper} animate-fade-in animate-delay-1`}>
             {/* Placeholder ilustración — reemplaza con foto real */}
             <div className={styles.avatarPlaceholder}>
               <span>✍️</span>
             </div>
           </div>
-          <div className={`${styles.heroText} animate-delay-2`}>
+          <div className={`${styles.heroText} animate-fade-in animate-delay-2`}>
             <span className={styles.label}>El rincón de</span>
             <h1 className={styles.title}>CamiDante</h1>
             <p className={styles.tagline}>
@@ -27,7 +27,7 @@ export default function About() {
         <div className={styles.divider}>♦</div>
 
         {/* Historia */}
-        <section className={`${styles.section} animate-delay-2`}>
+        <section className={`${styles.section} animate-fade-in animate-delay-2`}>
           <h2 className={styles.sectionTitle}>Mi historia</h2>
           <div className={styles.textBody}>
             <p>
@@ -51,7 +51,7 @@ export default function About() {
         <div className={styles.divider}>♦</div>
 
         {/* Qué encontrarás */}
-        <section className={`${styles.section} animate-delay-3`}>
+        <section className={`${styles.section} animate-fade-in animate-delay-3`}>
           <h2 className={styles.sectionTitle}>¿Qué encontrarás aquí?</h2>
           <div className={styles.pillars}>
             <div className={styles.pillar}>
