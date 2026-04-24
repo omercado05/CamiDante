@@ -1,9 +1,29 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
 import styles from './Header.module.css';
 
 export const Header = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+    };
+
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -25,7 +45,13 @@ export const Header = () => {
           <Link href="/about" className={styles.navLink}>Sobre Mí</Link>
         </nav>
         <div className={styles.actions}>
-          <Link href="/login" className={styles.loginLink}>Iniciar Sesión</Link>
+          {user ? (
+            <Link href="/perfil" className={styles.profileCircle}>
+              {user.email?.charAt(0).toUpperCase()}
+            </Link>
+          ) : (
+            <Link href="/login" className={styles.loginLink}>Iniciar Sesión</Link>
+          )}
         </div>
       </div>
     </header>

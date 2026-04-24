@@ -75,6 +75,27 @@
   color: var(--tertiary-container);
 }
 
+.profileCircle {
+  width: 32px;
+  height: 32px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-noto-serif), serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.profileCircle:hover {
+  transform: scale(1.05);
+  background-color: var(--secondary);
+}
+
 @media (max-width: 768px) {
   .nav {
     display: none; /* Hide nav on mobile for now, will implement mobile menu later */
