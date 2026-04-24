@@ -15,6 +15,10 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   title: "CamiDante Blog",
   description: "CamiDante Editorial Blog",
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
