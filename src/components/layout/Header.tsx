@@ -10,18 +10,43 @@ import styles from './Header.module.css';
 export const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUserData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+
+      if (currentUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', currentUser.id)
+          .single();
+        setIsAdmin(profile?.is_admin || false);
+      } else {
+        setIsAdmin(false);
+      }
     };
 
-    getUser();
+    getUserData();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      
+      if (currentUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', currentUser.id)
+          .single();
+        setIsAdmin(profile?.is_admin || false);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -29,7 +54,6 @@ export const Header = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Prevent scrolling when menu is open
     if (!isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -70,6 +94,11 @@ export const Header = () => {
           <Link href="/blog/lifestyle" className={styles.navLink}>Lifestyle</Link>
           <Link href="/blog/archivo" className={styles.navLink}>Archivo</Link>
           <Link href="/about" className={styles.navLink}>Sobre Mí</Link>
+          {isAdmin && (
+            <Link href="/admin" className={styles.navLink} style={{ color: 'var(--tertiary)', fontWeight: 'bold' }}>
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className={styles.actions}>
@@ -81,7 +110,6 @@ export const Header = () => {
             <Link href="/login" className={styles.loginLink}>Iniciar Sesión</Link>
           )}
 
-          {/* Mobile Menu Toggle */}
           <button 
             className={`${styles.menuToggle} ${isMenuOpen ? styles.menuToggleOpen : ''}`} 
             onClick={toggleMenu}
@@ -103,6 +131,11 @@ export const Header = () => {
         <Link href="/about" className={styles.mobileNavLink} onClick={closeMenu}>Sobre Mí</Link>
         
         <div style={{ marginTop: '20px', width: '100%', borderTop: '1px solid var(--outline-variant)', paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          {isAdmin && (
+            <Link href="/admin" className={styles.mobileNavLink} style={{ color: 'var(--tertiary)' }} onClick={closeMenu}>
+              Panel Admin
+            </Link>
+          )}
           {user ? (
             <>
               <Link href="/perfil" className={styles.mobileNavLink} onClick={closeMenu}>Mi Perfil</Link>
