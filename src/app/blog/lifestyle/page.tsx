@@ -5,6 +5,9 @@ import { supabase } from '@/lib/supabase';
 import styles from '../blog.module.css';
 
 export default async function Lifestyle() {
+  const { data: catData } = await supabase.from('categories').select('name').eq('slug', 'lifestyle').single();
+  const categoryName = catData?.name || 'Galería';
+
   const { data: posts } = await supabase
     .from('posts')
     .select('*, categories!inner(name, slug)')
@@ -17,8 +20,8 @@ export default async function Lifestyle() {
       <Header />
       <main className={styles.container}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Lifestyle</h1>
-          <p className={styles.description}>Reflexiones sobre el estilo de vida, hábitos y rutinas.</p>
+          <h1 className={styles.title}>{categoryName}</h1>
+          <p className={styles.description}>Fotografías, momentos y lo que me inspira.</p>
         </div>
         <div className={styles.grid}>
           {posts && posts.length > 0 ? (
@@ -26,7 +29,7 @@ export default async function Lifestyle() {
               <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                 <Card interactive>
                   <div className={styles.cardContent}>
-                    <span className={styles.category}>Lifestyle</span>
+                    <span className={styles.category}>{categoryName}</span>
                     <h3>{post.title}</h3>
                     <p className={styles.cardExcerpt}>{post.excerpt}</p>
                     <span className={styles.date}>

@@ -5,6 +5,9 @@ import { supabase } from '@/lib/supabase';
 import styles from '../blog.module.css';
 
 export default async function Reflections() {
+  const { data: catData } = await supabase.from('categories').select('name').eq('slug', 'reflections').single();
+  const categoryName = catData?.name || 'Reflexiones';
+
   const { data: posts } = await supabase
     .from('posts')
     .select('*, categories!inner(name, slug)')
@@ -17,7 +20,7 @@ export default async function Reflections() {
       <Header />
       <main className={styles.container}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Reflections</h1>
+          <h1 className={styles.title}>{categoryName}</h1>
           <p className={styles.description}>Pensamientos sueltos, ideas y ensayos personales.</p>
         </div>
         <div className={styles.grid}>
@@ -26,7 +29,7 @@ export default async function Reflections() {
               <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                 <Card interactive>
                   <div className={styles.cardContent}>
-                    <span className={styles.category}>Reflections</span>
+                    <span className={styles.category}>{categoryName}</span>
                     <h3>{post.title}</h3>
                     <p className={styles.cardExcerpt}>{post.excerpt}</p>
                     <span className={styles.date}>
