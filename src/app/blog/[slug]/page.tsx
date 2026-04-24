@@ -41,7 +41,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           
           <div className={styles.articleContent}>
             {/* Split content by newlines to render as paragraphs for now */}
-            {post.content?.split('\n').map((para: string, index: number) => (
+            {post.content?.replace(/\\n/g, '\n').split('\n').map((para: string, index: number) => (
               para.trim() ? (
                 para.startsWith('#') ? (
                   <h2 key={index}>{para.replace(/^#+\s/, '')}</h2>
