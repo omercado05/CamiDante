@@ -11,13 +11,19 @@ export const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const getUserData = async () => {
+    const getData = async () => {
+      // Get session
       const { data: { session } } = await supabase.auth.getSession();
       const currentUser = session?.user ?? null;
       setUser(currentUser);
+
+      // Get categories
+      const { data: cats } = await supabase.from('categories').select('*').order('name');
+      setCategories(cats || []);
 
       if (currentUser) {
         const { data: profile } = await supabase
@@ -31,7 +37,7 @@ export const Header = () => {
       }
     };
 
-    getUserData();
+    getData();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null;
@@ -89,9 +95,11 @@ export const Header = () => {
 
         {/* Desktop Nav */}
         <nav className={styles.nav}>
-          <Link href="/blog/reflections" className={styles.navLink}>Reflections</Link>
-          <Link href="/blog/books" className={styles.navLink}>Books</Link>
-          <Link href="/blog/lifestyle" className={styles.navLink}>Lifestyle</Link>
+          {categories.map((cat) => (
+            <Link key={cat.id} href={`/blog/${cat.slug}`} className={styles.navLink}>
+              {cat.name}
+            </Link>
+          ))}
           <Link href="/blog/archivo" className={styles.navLink}>Archivo</Link>
           <Link href="/about" className={styles.navLink}>Sobre Mí</Link>
           {isAdmin && (
@@ -124,9 +132,11 @@ export const Header = () => {
 
       {/* Mobile Nav Overlay */}
       <nav className={`${styles.mobileNav} ${isMenuOpen ? styles.mobileNavOpen : ''}`}>
-        <Link href="/blog/reflections" className={styles.mobileNavLink} onClick={closeMenu}>Reflections</Link>
-        <Link href="/blog/books" className={styles.mobileNavLink} onClick={closeMenu}>Books</Link>
-        <Link href="/blog/lifestyle" className={styles.mobileNavLink} onClick={closeMenu}>Lifestyle</Link>
+        {categories.map((cat) => (
+          <Link key={cat.id} href={`/blog/${cat.slug}`} className={styles.mobileNavLink} onClick={closeMenu}>
+            {cat.name}
+          </Link>
+        ))}
         <Link href="/blog/archivo" className={styles.mobileNavLink} onClick={closeMenu}>Archivo</Link>
         <Link href="/about" className={styles.mobileNavLink} onClick={closeMenu}>Sobre Mí</Link>
         
