@@ -36,9 +36,8 @@ export default function About() {
               esos márgenes se quedaron pequeños y decidí crear un espacio propio.
             </p>
             <p>
-              <strong>CamiDante</strong> es una mezcla de mi nombre y mi admiración por Dante Alighieri —
-              ese poeta que también emprendió un viaje sin mapa claro, guiado por la curiosidad y la fe
-              en que al final del camino habría algo que valiera la pena ver.
+              <strong>CamiDante</strong> es una mezcla de mi nombre y mi amor por mi perro Dante Patricio —
+              ese compañero fiel que me acompaña caminando en esta vida entre libros, problemas, dudas y alegrías.
             </p>
             <p>
               Aquí escribo sobre los libros que me cambiaron, las rutinas que me sostienen y los
@@ -56,17 +55,17 @@ export default function About() {
           <div className={styles.pillars}>
             <div className={styles.pillar}>
               <span className={styles.pillarIcon}>📚</span>
-              <h3>Books</h3>
+              <h3>Libros</h3>
               <p>Reseñas, anotaciones y diarios de lectura de libros que dejaron huella.</p>
             </div>
             <div className={styles.pillar}>
-              <span className={styles.pillarIcon}>🌿</span>
-              <h3>Lifestyle</h3>
-              <p>Rituales matutinos, hábitos lentos y la belleza de lo ordinario.</p>
+              <span className={styles.pillarIcon}>📷</span>
+              <h3>Galería</h3>
+              <p>Fotografías, pinturas, lugares, momentos, y todo aquello que me inspira.</p>
             </div>
             <div className={styles.pillar}>
               <span className={styles.pillarIcon}>💭</span>
-              <h3>Reflections</h3>
+              <h3>Reflexiones</h3>
               <p>Ensayos personales, preguntas sin respuesta y pensamientos sueltos.</p>
             </div>
           </div>
