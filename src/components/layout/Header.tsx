@@ -8,6 +8,7 @@ import styles from './Header.module.css';
 
 export const Header = () => {
   const [user, setUser] = useState<any>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -24,6 +25,8 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -37,6 +40,8 @@ export const Header = () => {
           />
           <span className={styles.logoText}>CamiDante</span>
         </Link>
+
+        {/* Desktop Nav */}
         <nav className={styles.nav}>
           <Link href="/blog/reflections" className={styles.navLink}>Reflections</Link>
           <Link href="/blog/books" className={styles.navLink}>Books</Link>
@@ -44,6 +49,7 @@ export const Header = () => {
           <Link href="/blog/archivo" className={styles.navLink}>Archivo</Link>
           <Link href="/about" className={styles.navLink}>Sobre Mí</Link>
         </nav>
+
         <div className={styles.actions}>
           {user ? (
             <Link href="/perfil" className={styles.profileCircle}>
@@ -52,8 +58,28 @@ export const Header = () => {
           ) : (
             <Link href="/login" className={styles.loginLink}>Iniciar Sesión</Link>
           )}
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className={`${styles.menuToggle} ${isMenuOpen ? styles.menuToggleOpen : ''}`} 
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Nav */}
+      <nav className={`${styles.mobileNav} ${isMenuOpen ? styles.mobileNavOpen : ''}`}>
+        <Link href="/blog/reflections" className={styles.mobileNavLink} onClick={toggleMenu}>Reflections</Link>
+        <Link href="/blog/books" className={styles.mobileNavLink} onClick={toggleMenu}>Books</Link>
+        <Link href="/blog/lifestyle" className={styles.mobileNavLink} onClick={toggleMenu}>Lifestyle</Link>
+        <Link href="/blog/archivo" className={styles.mobileNavLink} onClick={toggleMenu}>Archivo</Link>
+        <Link href="/about" className={styles.mobileNavLink} onClick={toggleMenu}>Sobre Mí</Link>
+      </nav>
     </header>
   );
 };

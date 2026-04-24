@@ -2,6 +2,9 @@
   border-bottom: 1px solid var(--outline-variant);
   background-color: var(--surface);
   padding: var(--stack-md) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .container {
@@ -48,6 +51,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: color 0.2s ease;
+  text-decoration: none;
 }
 
 .navLink:hover {
@@ -57,6 +61,7 @@
 .actions {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
 .loginLink {
@@ -68,6 +73,7 @@
   letter-spacing: 0.05em;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
+  text-decoration: none;
 }
 
 .loginLink:hover {
@@ -96,8 +102,87 @@
   background-color: var(--secondary);
 }
 
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 110;
+}
+
+.menuToggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--on-surface);
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.menuToggleOpen span:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.menuToggleOpen span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.menuToggleOpen span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+.mobileNav {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  padding: 24px var(--gutter);
+  gap: 20px;
+  border-bottom: 1px solid var(--outline-variant);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.mobileNavOpen {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobileNavLink {
+  font-family: var(--font-work-sans), sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--on-surface);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 @media (max-width: 768px) {
   .nav {
-    display: none; /* Hide nav on mobile for now, will implement mobile menu later */
+    display: none;
+  }
+  
+  .menuToggle {
+    display: flex;
+  }
+  
+  .logoText {
+    font-size: 20px;
   }
 }
