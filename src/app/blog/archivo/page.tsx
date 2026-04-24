@@ -1,8 +1,16 @@
 import { Header } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Card';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 import styles from '../blog.module.css';
 
-export default function Archivo() {
+export default async function Archivo() {
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('*, categories(name)')
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+
   return (
     <>
       <Header />
@@ -12,18 +20,28 @@ export default function Archivo() {
           <p className={styles.description}>Todas las publicaciones en un solo lugar.</p>
         </div>
         <div className={styles.grid}>
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <Card key={item} interactive>
-              <div className={styles.cardContent}>
-                <span className={styles.category}>Reflections</span>
-                <h3>Título del artículo {item}</h3>
-                <p className={styles.cardExcerpt}>
-                  Un breve extracto de lo que trata este artículo en el archivo general.
-                </p>
-                <span className={styles.date}>10 Octubre, 2026</span>
-              </div>
-            </Card>
-          ))}
+          {posts && posts.length > 0 ? (
+            posts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+                <Card interactive>
+                  <div className={styles.cardContent}>
+                    <span className={styles.category}>{post.categories?.name}</span>
+                    <h3>{post.title}</h3>
+                    <p className={styles.cardExcerpt}>{post.excerpt}</p>
+                    <span className={styles.date}>
+                      {new Date(post.published_at).toLocaleDateString('es-ES', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                </Card>
+              </Link>
+            ))
+          ) : (
+            <p>No hay artículos publicados todavía.</p>
+          )}
         </div>
       </main>
     </>

@@ -1,8 +1,28 @@
 import { Header } from '@/components/layout/Header';
+import { supabase } from '@/lib/supabase';
+import { notFound } from 'next/navigation';
 import styles from '../blog.module.css';
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  // Fetch post from Supabase
+  const { data: post, error } = await supabase
+    .from('posts')
+    .select('*, categories(name)')
+    .eq('slug', slug)
+    .single();
+
+  if (error || !post) {
+    console.error('Error fetching post:', error);
+    return notFound();
+  }
+
+  const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <>
@@ -11,29 +31,27 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <article className="animate-delay-1">
           <header className={styles.articleHeader}>
             <div className={styles.articleMeta}>
-              <span style={{ color: 'var(--secondary)' }}>Reflections</span>
+              <span style={{ color: 'var(--secondary)' }}>{post.categories?.name}</span>
               <span>•</span>
-              <span>24 Octubre, 2026</span>
+              <span>{formattedDate}</span>
             </div>
-            <h1 className={styles.title}>El arte de la pausa en un mundo acelerado ({slug})</h1>
+            <h1 className={styles.title}>{post.title}</h1>
+            {post.excerpt && <p className={styles.articleExcerpt}>{post.excerpt}</p>}
           </header>
           
           <div className={styles.articleContent}>
-            <p>
-              Vivimos en una época donde la velocidad se premia y la lentitud se castiga. 
-              Sin embargo, es en las pausas donde realmente encontramos el sentido a lo que hacemos.
-              Este artículo es un recordatorio personal sobre la importancia de detenerse.
-            </p>
-            
-            <blockquote>
-              "El silencio no es la ausencia de sonido, sino la presencia de uno mismo."
-            </blockquote>
-            
-            <p>
-              Cuando decidí empezar a levantarme más temprano, no lo hice para ser más productivo. 
-              Lo hice para tener una hora donde el mundo no exigiera nada de mí. Ese espacio de 
-              tiempo se ha vuelto sagrado.
-            </p>
+            {/* Split content by newlines to render as paragraphs for now */}
+            {post.content?.split('\n').map((para: string, index: number) => (
+              para.trim() ? (
+                para.startsWith('#') ? (
+                  <h2 key={index}>{para.replace(/^#+\s/, '')}</h2>
+                ) : para.startsWith('>') ? (
+                  <blockquote key={index}>{para.replace(/^>\s/, '')}</blockquote>
+                ) : (
+                  <p key={index}>{para}</p>
+                )
+              ) : <br key={index} />
+            ))}
           </div>
         </article>
       </main>
