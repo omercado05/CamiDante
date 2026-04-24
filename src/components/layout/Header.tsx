@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 import styles from './Header.module.css';
 
 export const Header = () => {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,12 +27,32 @@ export const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    // Prevent scrolling when menu is open
+    if (!isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    closeMenu();
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logoWrapper}>
+        <Link href="/" className={styles.logoWrapper} onClick={closeMenu}>
           <Image
             src="/logo.png"
             alt="CamiDante logo"
@@ -72,13 +94,29 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Nav Overlay */}
       <nav className={`${styles.mobileNav} ${isMenuOpen ? styles.mobileNavOpen : ''}`}>
-        <Link href="/blog/reflections" className={styles.mobileNavLink} onClick={toggleMenu}>Reflections</Link>
-        <Link href="/blog/books" className={styles.mobileNavLink} onClick={toggleMenu}>Books</Link>
-        <Link href="/blog/lifestyle" className={styles.mobileNavLink} onClick={toggleMenu}>Lifestyle</Link>
-        <Link href="/blog/archivo" className={styles.mobileNavLink} onClick={toggleMenu}>Archivo</Link>
-        <Link href="/about" className={styles.mobileNavLink} onClick={toggleMenu}>Sobre Mí</Link>
+        <Link href="/blog/reflections" className={styles.mobileNavLink} onClick={closeMenu}>Reflections</Link>
+        <Link href="/blog/books" className={styles.mobileNavLink} onClick={closeMenu}>Books</Link>
+        <Link href="/blog/lifestyle" className={styles.mobileNavLink} onClick={closeMenu}>Lifestyle</Link>
+        <Link href="/blog/archivo" className={styles.mobileNavLink} onClick={closeMenu}>Archivo</Link>
+        <Link href="/about" className={styles.mobileNavLink} onClick={closeMenu}>Sobre Mí</Link>
+        
+        <div style={{ marginTop: '20px', width: '100%', borderTop: '1px solid var(--outline-variant)', paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          {user ? (
+            <>
+              <Link href="/perfil" className={styles.mobileNavLink} onClick={closeMenu}>Mi Perfil</Link>
+              <button 
+                onClick={handleSignOut}
+                style={{ background: 'none', border: 'none', font: 'inherit', cursor: 'pointer', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '18px' }}
+              >
+                Cerrar Sesión
+              </button>
+            </>
+          ) : (
+            <Link href="/login" className={styles.mobileNavLink} onClick={closeMenu}>Iniciar Sesión</Link>
+          )}
+        </div>
       </nav>
     </header>
   );

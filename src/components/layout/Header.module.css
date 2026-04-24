@@ -106,71 +106,65 @@
   display: none;
   flex-direction: column;
   justify-content: space-around;
-  width: 24px;
+  width: 30px;
   height: 24px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 110;
+  z-index: 200;
+  position: relative;
 }
 
 .menuToggle span {
-  width: 24px;
+  width: 100%;
   height: 2px;
   background: var(--on-surface);
   border-radius: 10px;
-  transition: all 0.3s linear;
-  position: relative;
-  transform-origin: 1px;
+  transition: all 0.3s ease;
 }
 
 .menuToggleOpen span:nth-child(1) {
-  transform: rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .menuToggleOpen span:nth-child(2) {
   opacity: 0;
-  transform: translateX(20px);
 }
 
 .menuToggleOpen span:nth-child(3) {
-  transform: rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .mobileNav {
-  position: absolute;
-  top: 100%;
+  position: fixed;
+  top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--surface);
   display: flex;
   flex-direction: column;
-  padding: 24px var(--gutter);
-  gap: 20px;
-  border-bottom: 1px solid var(--outline-variant);
-  transform: translateY(-100%);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease-in-out;
-  pointer-events: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 32px;
+  z-index: 150;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
 }
 
 .mobileNavOpen {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .mobileNavLink {
-  font-family: var(--font-work-sans), sans-serif;
-  font-size: 18px;
-  font-weight: 500;
+  font-family: var(--font-noto-serif), serif;
+  font-size: 28px;
+  font-weight: 400;
   color: var(--on-surface);
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {
