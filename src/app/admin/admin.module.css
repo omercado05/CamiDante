@@ -1,0 +1,146 @@
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--section-padding) var(--gutter);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--stack-lg);
+}
+
+.title {
+  font-size: 32px;
+  color: var(--primary);
+}
+
+.tableContainer {
+  background: var(--surface-container-low);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--outline-variant);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th, .table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.table th {
+  background: var(--surface-container-high);
+  font-family: var(--font-work-sans), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.postTitle {
+  font-weight: 500;
+  color: var(--on-surface);
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.published {
+  background: #e6f4ea;
+  color: #1e8e3e;
+}
+
+.draft {
+  background: #f1f3f4;
+  color: #5f6368;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.editBtn, .deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.editBtn {
+  color: var(--primary);
+}
+
+.editBtn:hover {
+  background: var(--primary-container);
+}
+
+.deleteBtn {
+  color: var(--error);
+}
+
+.deleteBtn:hover {
+  background: var(--error-container);
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-md);
+  background: var(--surface-container-low);
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.input, .select, .textarea {
+  padding: 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.textarea {
+  min-height: 300px;
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
